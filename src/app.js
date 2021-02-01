@@ -50,9 +50,23 @@ const bookmarks = [{
     desc: 'Google search homepage'
 }]
 
-app.get('/bookmark', (req, res) => {
+app.get('/bookmarks', (req, res) => {
     res.json(bookmarks)
 });
+
+app.get('/bookmarks/:id', (req, res) => {
+    const { id } = req.params;
+    const bookmark = bookmarks.find(b => b.id == id);
+
+    if(!bookmark) {
+        logger.error(`Bookmark ${id} not found.`);
+        return res
+            .status(404)
+            .send('Bookmark not found');
+    };
+    
+    res.json(bookmark)
+})
 
 app.use(function errorHandler(error, req, res, next) {
     let response;
