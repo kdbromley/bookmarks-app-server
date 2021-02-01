@@ -5,6 +5,8 @@ const cors = require('cors');
 const helmet = require('helmet');
 const { NODE_ENV } = require('./config');
 const winston = require('winston');
+const { v4: uuid } = require('uuid'); 
+const { PORT } = require('./config');
 
 
 const app = express();
@@ -82,7 +84,25 @@ app.post('/bookmarks', (req, res) => {
         logger.error('Invalid url');
         return res.status(400).send('Invalid data')
     }
-    res.status(200).send('ok')
+
+    const id = uuid();
+
+    const bookmark = {
+        id,
+        title,
+        url,
+        rating,
+        desc
+    };
+
+    bookmarks.push(bookmark);
+
+    logger.info(`Bookmark ${id} for ${title} created.`);
+
+    res
+        .status(201)
+        .location(`http://localhost:${PORT}/card/${id}`)
+        .json(bookmark)
 })
 
 app.use(function errorHandler(error, req, res, next) {
