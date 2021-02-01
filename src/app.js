@@ -17,6 +17,16 @@ app.use(helmet());
 app.use(cors());
 app.use(express.json());
 
+app.use(function validateBearerToken(req, res, next) {
+    const apiToken = process.env.API_TOKEN;
+    const authToken = req.get('Authorization');
+
+    if(!authToken || authToken.split(' ')[1] !== apiToken) {
+        return res.status(401).json({ error: 'Unauthorized request' });
+    };
+    next()
+})
+
 const bookmarks = [{
     id: '875d3650-2225-4144-b9ab-652df8772421',
     title: 'Google',
@@ -27,7 +37,6 @@ const bookmarks = [{
 app.get('/', (req, res) => {
     res.json(bookmarks)
 });
-
 
 
 app.use(function errorHandler(error, req, res, next) {
