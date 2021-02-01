@@ -15,9 +15,17 @@ const morganSetting = (NODE_ENV === 'production')
 app.use(morgan(morganSetting));
 app.use(helmet());
 app.use(cors());
+app.use(express.json());
+
+const bookmarks = [{
+    id: '875d3650-2225-4144-b9ab-652df8772421',
+    title: 'Google',
+    url: 'https://www.google.com/',
+    desc: 'Google search homepage'
+}]
 
 app.get('/', (req, res) => {
-    res.send('Hello, world!')
+    res.json(bookmarks)
 });
 
 
