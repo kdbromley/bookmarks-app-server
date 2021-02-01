@@ -50,10 +50,9 @@ const bookmarks = [{
     desc: 'Google search homepage'
 }]
 
-app.get('/', (req, res) => {
+app.get('/bookmark', (req, res) => {
     res.json(bookmarks)
 });
-
 
 app.use(function errorHandler(error, req, res, next) {
     let response;
